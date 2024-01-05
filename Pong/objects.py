@@ -1,7 +1,7 @@
 import pygame as pg
 
 def speed_conv(x):
-    new_speed = x ** 0.5
+    new_speed = 5 + (x ** 0.65)
     return new_speed
 
 class Paddle:
@@ -55,7 +55,7 @@ class Ball:
         self.posy = posy
         self.radius = radius
         self.base_speed = base_speed
-        self.speed = 5 + speed_conv(base_speed)
+        self.speed = speed_conv(base_speed)
         self.color = color
         self.xMult = xMult
         self.yMult = yMult
@@ -93,16 +93,16 @@ class Ball:
 
         self.xMult *= -1
         self.base_speed = speed
-        self.speed = 5 + speed_conv(self.base_speed)
+        self.speed = speed_conv(self.base_speed)
         self.justonce = True
 
 
     def hit(self):
         self.xMult *= -1
-        print(f"OLD {self.base_speed} || {self.speed}")
+        #print(f"OLD {self.base_speed} || {self.speed}")
         self.base_speed += 1
-        self.speed = 5 + speed_conv(self.base_speed)
-        print(f"NEW {self.base_speed} || {self.speed}")
+        self.speed = speed_conv(self.base_speed)
+        #print(f"NEW {self.base_speed} || {self.speed}")
 
     def getRect(self):
         return self.ball
