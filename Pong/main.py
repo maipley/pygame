@@ -16,8 +16,6 @@ ball_radius = win_x // 40
 ball_speed = 8
 ball_color = "white"
 
-score_x = win_x // 5
-score_y = win_y // 5
 score_color = "white"
 
 #print(f"[SCORE POSITION] X:{score_x}, Y:{score_y}")
@@ -34,13 +32,44 @@ font = pg.font.Font(None, 40)
 
 def game():
     run = True
-    global win, win_x, win_y
-    l_point = False
-    r_point = False
+    global win, win_x, win_y, paddle_width, paddle_height, paddle_space, ball_radius
     
-    paddle_left = Paddle(win, win_y, paddle_space, paddle_center, paddle_width, paddle_height, paddle_speed, paddle_color)
-    paddle_right = Paddle(win, win_y, win_x - paddle_width - paddle_space, paddle_center, paddle_width, paddle_height, paddle_speed, paddle_color)
-    ball = Ball(win, win_x, win_y, win_x // 2, win_y // 2, ball_radius, ball_speed, ball_color, 1, -1)
+
+    paddle_left = Paddle(win,
+                         win_x,
+                         win_y,
+                         paddle_space,
+                         paddle_center,
+                         paddle_width,
+                         paddle_height,
+                         paddle_speed,
+                         paddle_color
+                         )
+
+    paddle_right = Paddle(win,
+                          win_x,
+                          win_y,
+                          win_x - paddle_width - paddle_space,
+                          paddle_center,
+                          paddle_width,
+                          paddle_height,
+                          paddle_speed,
+                          paddle_color,
+                          right = True
+                          )
+
+    ball = Ball(win,
+                win_x,
+                win_y,
+                win_x // 2,
+                win_y // 2,
+                ball_radius,
+                ball_speed,
+                ball_color,
+                1,
+                -1
+                )
+
 
     paddle_list = [paddle_left, paddle_right]
 
@@ -54,11 +83,29 @@ def game():
 
         for event in pg.event.get():
             
-            if event.type == pg.QUIT:
-                run = False
-            elif event.type == pg.VIDEORESIZE:
-                #win = pg.display.set_mode(event.size, flags)
-                win_x, win_y = event.size
+            match event.type:
+
+                case pg.QUIT:
+                    run = False
+                
+                case pg.VIDEORESIZE:
+                    win_x, win_y = event.size
+                    win = pg.display.set_mode((win_x, win_y), flags)
+                    paddle_width = win_x // 60
+                    paddle_height = win_y // 4
+                    paddle_space = win_x // 85
+                    ball_radius = win_x // 40
+                    #print(win.get_width(), win.get_height())
+                    paddle_left.resize(win_x, win_y, paddle_width, paddle_height, paddle_space)
+                    paddle_right.resize(win_x, win_y, paddle_width, paddle_height, paddle_space)
+                    ball.resize(win_x, win_y, ball_radius)
+
+                case pg.KEYUP:
+                    if event.key == pg.K_h:
+                        #print("[PRESSED] H")
+                        paddle_left.pause()
+                        paddle_right.pause()
+                        ball.pause()
             
         
         
@@ -90,16 +137,17 @@ def game():
             p_r_yMult = 0
 
         if esc:
-            run = False
+            run = False 
 
 
-        for paddle in paddle_list:
+        #for paddle in paddle_list:
             #if pg.Rect.colliderect(ball.getRect(), paddle.getRect()):
                 #ball.hit()
-            if pg.Rect.colliderect(ball.getRect(), paddle_left.getRect()) and ball.getDir() == -1:
-                ball.hit()
-            if pg.Rect.colliderect(ball.getRect(), paddle_right.getRect()) and ball.getDir() == 1:
-                ball.hit()
+
+        if pg.Rect.colliderect(ball.getRect(), paddle_left.getRect()) and ball.getDir() == -1:
+            ball.hit()
+        if pg.Rect.colliderect(ball.getRect(), paddle_right.getRect()) and ball.getDir() == 1:
+            ball.hit()
 
 
         paddle_left.update(p_l_yMult)
@@ -120,14 +168,13 @@ def game():
         #center_point = pg.draw.circle(win, "red", (win_x // 2, win_y // 2), 1)
 
 
-        paddle_left.displayScore(p_l_score, score_x, score_y, font, score_color)
-        paddle_right.displayScore(p_r_score, win_x - score_x, score_y, font, score_color)
+        paddle_left.displayScore(p_l_score, font, score_color)
+        paddle_right.displayScore(p_r_score, font, score_color)
 
         #print(p_l_score, p_r_score)
 
         pg.display.update()
 
-        l_point, r_point = False, False
 
         clock.tick(fps)
 
