@@ -3,7 +3,7 @@ from objects import Paddle, Ball
 
 win_x = 1280
 win_y = 720
-fps = 60
+FPS = 60
 
 paddle_space = 15
 paddle_width = win_x // 60
@@ -175,7 +175,7 @@ def game():
 
         pg.display.update()
 
-        clock.tick(fps)
+        clock.tick(FPS)
 
     pg.quit()
 
