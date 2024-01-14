@@ -46,6 +46,7 @@ def main():
             dead = False
 
         ## EVENT HANDLING ##
+        pressed = False
         for event in pg.event.get():
             match event.type:
                 case pg.QUIT:
@@ -57,18 +58,24 @@ def main():
                         case pg.K_SPACE:
                             dead = True
                 case pg.KEYDOWN:
+                    if pressed:
+                        continue
                     match event.key:
                         case pg.K_w | pg.K_UP:
                             if snk_dir != DOWN:
+                                pressed = True
                                 snk_dir = UP
                         case pg.K_a | pg.K_LEFT:
                             if snk_dir != RIGHT:
+                                pressed = True
                                 snk_dir = LEFT
                         case pg.K_s | pg.K_DOWN:
                             if snk_dir != UP:
+                                pressed = True
                                 snk_dir = DOWN
                         case pg.K_d | pg.K_RIGHT:
                             if snk_dir != LEFT:
+                                pressed = True
                                 snk_dir = RIGHT
 
         ## UPDATE ##
