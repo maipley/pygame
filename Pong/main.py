@@ -1,8 +1,11 @@
 import pygame as pg
 from objects import Paddle, Ball
 
-win_x = 1280
-win_y = 720
+pg.init()
+info = pg.display.Info()
+
+win_x = info.current_w or 854
+win_y = info.current_h or 480
 FPS = 60
 
 paddle_space = 15
@@ -20,10 +23,9 @@ score_color = "white"
 
 # print(f"[SCORE POSITION] X:{score_x}, Y:{score_y}")
 
-pg.init()
 clock = pg.time.Clock()
 
-flags = pg.RESIZABLE  # | pg.FULLSCREEN
+flags = pg.NOFRAME # | pg.RESIZABLE  # | pg.FULLSCREEN
 win = pg.display.set_mode((win_x, win_y), flags)
 pg.display.set_caption("Pong?")
 font = pg.font.Font(None, 40)
@@ -106,6 +108,11 @@ def game():
                         paddle_left.pause()
                         paddle_right.pause()
                         ball.pause()
+                    elif event.key == pg.K_b:
+                        p_l_score = 0
+                        p_r_score = 0
+                        ball.reset(ball_speed)
+
 
         ## Keybinds
         keys = pg.key.get_pressed()

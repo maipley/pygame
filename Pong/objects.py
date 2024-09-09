@@ -62,7 +62,7 @@ class Paddle:
 
     def pause(self):
         if not self.paused:
-            print("pauseing")
+            # print("pauseing")
             self.paused = True
         else:
             self.paused = False
